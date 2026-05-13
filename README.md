@@ -6,8 +6,10 @@ Workflow complet : création de projet → sessions Claude Code → switch vers 
 
 ```
 handoff-system/
-├── install.sh              ← script d'installation global (tout-en-un)
-├── new-project.sh          ← créer un repo avec Claude prêt
+├── install.sh              ← installateur macOS / Linux / Git Bash
+├── install.ps1             ← installateur Windows (PowerShell natif)
+├── new-project.sh          ← créer un repo avec Claude prêt (Unix)
+├── new-project.ps1         ← créer un repo avec Claude prêt (Windows)
 ├── git-template/
 │   ├── CLAUDE.md           ← template CLAUDE.md (rempli automatiquement)
 │   ├── CONTEXT.md          ← context handoff initial vide
@@ -15,12 +17,22 @@ handoff-system/
 └── README.md
 ```
 
+---
+
 ## Installation (une seule fois)
 
+### macOS / Linux / Git Bash
 ```bash
 bash install.sh
 source ~/.zshrc   # ou ~/.bashrc
 ```
+
+### Windows (PowerShell)
+```powershell
+.\install.ps1
+```
+> Si le script est bloqué par la politique d'exécution :
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
 Ce qui s'installe :
 | Élément | Emplacement | Rôle |
@@ -29,20 +41,28 @@ Ce qui s'installe :
 | `new-project` | `~/.local/bin/new-project` | Commande globale |
 | `/handoff` | `~/.claude/commands/handoff.md` | Commande Claude Code |
 | `/init-context` | `~/.claude/commands/init-context.md` | Commande Claude Code |
-| `handoff.sh` | `~/.claude/handoff.sh` | Script de génération |
+| `handoff.sh` / `handoff.ps1` | `~/.claude/` | Script de génération |
 | Hook Stop | `~/.claude/settings.json` | Rappel automatique |
-| `handoff` alias | `~/.zshrc` | Depuis le terminal |
+| `handoff` alias | shell profile | Depuis le terminal |
 
 ---
 
 ## Créer un nouveau projet
 
+### macOS / Linux / Git Bash
 ```bash
 new-project mon-api --stack node      # Node.js / TypeScript
 new-project mon-script --stack python # Python
 new-project ma-lib --stack rust       # Rust
 new-project mon-service --stack go    # Go
 new-project mon-projet                # Détection automatique
+```
+
+### Windows (PowerShell)
+```powershell
+new-project mon-api -Stack node
+new-project mon-script -Stack python
+new-project mon-projet               # Détection automatique
 ```
 
 Chaque projet créé contient :
@@ -56,21 +76,27 @@ Chaque projet créé contient :
 
 ## Intégrer sur un projet existant
 
-Les commandes `/handoff` et `/init-context` sont globales (installées une fois via `install.sh`). Il suffit d'ajouter les deux fichiers au projet :
+Les commandes `/handoff` et `/init-context` sont globales (installées une fois via l'installateur). Il suffit d'ajouter les deux fichiers au projet :
 
+### macOS / Linux / Git Bash
 ```bash
 cd mon-projet-existant
+cp ~/.git-template/project-files/CLAUDE.md .
+cp ~/.git-template/project-files/CONTEXT.md .
+git add CLAUDE.md CONTEXT.md
+git commit -m "chore: add handoff system"
+```
 
-# Copier les fichiers depuis le git template global
-cp ~/.git-template/CLAUDE.md .
-cp ~/.git-template/CONTEXT.md .
-
+### Windows (PowerShell)
+```powershell
+cd mon-projet-existant
+Copy-Item "$HOME\.git-template\project-files\CLAUDE.md" .
+Copy-Item "$HOME\.git-template\project-files\CONTEXT.md" .
 git add CLAUDE.md CONTEXT.md
 git commit -m "chore: add handoff system"
 ```
 
 Puis dans Claude Code :
-
 ```
 /init-context   ← Claude lit le code existant et remplit CLAUDE.md avec le vrai contexte du projet
 ```

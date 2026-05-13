@@ -139,14 +139,13 @@ cat > "$COMMANDS_DIR/handoff.md" << 'EOF'
 description: Génère un fichier CONTEXT.md de handoff pour switcher vers un autre LLM (Gemini, etc.) sans perdre le contexte
 ---
 
-Génère un fichier de handoff complet pour me permettre de continuer cette session sur un autre LLM (ex: Gemini Code Assist) sans perdre de contexte.
+Génère un fichier de handoff complet pour continuer cette session sur un autre LLM sans perdre de contexte.
 
 Voici ce que tu dois faire :
 
-1. Lance d'abord le script de base :
-   ```bash
-   bash ~/.claude/handoff.sh "$PWD"
-   ```
+1. Lance d'abord le script selon le système :
+   - **macOS / Linux** : `bash ~/.claude/handoff.sh "$PWD"`
+   - **Windows** : `powershell -NoProfile -File "$HOME\.claude\handoff.ps1" "$PWD"`
 
 2. Ensuite, **complète le fichier CONTEXT.md généré** en remplissant précisément :
    - **Objectif de la session** : résume en 1-2 phrases ce qu'on essaie d'accomplir
@@ -170,9 +169,8 @@ description: Charge le CONTEXT.md du projet pour reprendre une session précéde
 
 Lis le fichier CONTEXT.md à la racine du projet courant et reprends exactement là où la session précédente s'est arrêtée.
 
-```bash
-cat "$PWD/CONTEXT.md" 2>/dev/null || echo "Aucun CONTEXT.md trouvé dans $PWD"
-```
+- **macOS / Linux** : `cat "$PWD/CONTEXT.md" 2>/dev/null || echo "Aucun CONTEXT.md trouvé"`
+- **Windows** : `Get-Content "$PWD\CONTEXT.md"`
 
 Après lecture :
 1. Confirme en une phrase ce que tu as compris de la situation

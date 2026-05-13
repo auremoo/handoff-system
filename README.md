@@ -54,6 +54,33 @@ Chaque projet créé contient :
 
 ---
 
+## Intégrer sur un projet existant
+
+Les commandes `/handoff` et `/init-context` sont globales (installées une fois via `install.sh`). Il suffit d'ajouter les deux fichiers au projet :
+
+```bash
+cd mon-projet-existant
+
+# Copier les fichiers depuis le git template global
+cp ~/.git-template/CLAUDE.md .
+cp ~/.git-template/CONTEXT.md .
+
+git add CLAUDE.md CONTEXT.md
+git commit -m "chore: add handoff system"
+```
+
+Puis dans Claude Code :
+
+```
+/init-context   ← Claude lit le code existant et remplit CLAUDE.md avec le vrai contexte du projet
+```
+
+C'est tout. Le workflow `/handoff` est immédiatement disponible.
+
+> `.gitignore` : optionnel, à merger manuellement si tu as déjà le tien.
+
+---
+
 ## Workflow quotidien
 
 ```

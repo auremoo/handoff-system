@@ -36,83 +36,48 @@ rm -rf tmp-handoff
 
 Ça n'écrase rien d'existant — seul le dossier `commands/` est ajouté. Ton `CLAUDE.md`, `.claude/settings.json`, etc. restent intacts.
 
-Les commandes sont disponibles dans Claude Code immédiatement.
-
 ---
 
 ## Cas 1 — Nouveau projet
 
-```bash
-mkdir mon-projet && cd mon-projet
-git init
-git clone https://github.com/auremoo/handoff-system tmp-handoff
-mkdir -p .claude/commands
-cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
-cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
-rm -rf tmp-handoff
-claude
-```
-
-Dans Claude Code, commence par décrire ton projet :
+Après l'installation, ouvre Claude Code et décris ton projet :
 
 ```
 Je démarre un projet [description]. Stack : [stack].
 Voici ce que je veux construire : [objectif].
 ```
 
-Code ta session. Quand tu approches la limite de contexte :
-
-```
-/handoff
-```
-
-Claude va :
-1. Lire l'état git (branche, fichiers modifiés, derniers commits)
-2. Résumer ce qui a été fait, où on en est, et la prochaine action
-3. Écrire `CONTEXT.md` à la racine du projet
-4. T'afficher un **prompt d'amorce prêt à coller dans Gemini**
+Code ta session. Quand tu approches la limite de contexte, tape `/handoff`.
 
 ---
 
 ## Cas 2 — Projet déjà commencé
 
-```bash
-cd mon-projet-existant
-git clone https://github.com/auremoo/handoff-system tmp-handoff
-mkdir -p .claude/commands
-cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
-cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
-rm -rf tmp-handoff
+Après l'installation, ouvre Claude Code directement.
+
+**Tu as déjà un `CLAUDE.md` ?** Garde-le tel quel — Claude s'en servira pour mieux remplir `CONTEXT.md`.
+
+**Pas encore de `CONTEXT.md` ?** `/init-context` n'aura rien à lire. Décris la situation manuellement en début de session, puis tape `/handoff` en fin de session pour en créer un.
+
+---
+
+## Workflow quotidien
+
+```
 claude
+
+/init-context          ← reprend le contexte de la session précédente
+
+# ... tu codes ...
+
+/handoff               ← génère CONTEXT.md + prompt prêt pour Gemini
 ```
-
-**Tu as déjà un `CLAUDE.md` ?** C'est parfait, garde-le tel quel. Il n'est pas touché. Claude s'en servira automatiquement pour mieux remplir `CONTEXT.md` lors du `/handoff`.
-
-**Pas encore de `CONTEXT.md` ?** `/init-context` n'aura rien à lire. Lance `/handoff` en fin de première session pour en créer un, ou crée-le manuellement :
-
-```
-/handoff
-```
-
-Ensuite le workflow est identique : code → `/handoff` en fin de session.
 
 ---
 
-## Reprendre une session (Claude Code → Claude Code)
+## Reprendre sur Gemini / autre IA
 
-En début de session suivante dans Claude Code :
-
-```
-/init-context
-```
-
-Claude lit `CONTEXT.md` et répond en une phrase ce qu'il a compris, puis propose de commencer la prochaine action. Tu n'as rien à réexpliquer.
-
----
-
-## Reprendre une session (Claude Code → Gemini / autre IA)
-
-Après `/handoff`, Claude t'affiche un bloc comme ça :
+Après `/handoff`, Claude t'affiche un prompt d'amorce. Colle-le dans Gemini (ou Copilot, GPT-4, etc.) :
 
 ```
 Tu reprends une session de développement. Voici le contexte exact :
@@ -128,9 +93,7 @@ Règles :
 Go.
 ```
 
-**Colle ce bloc dans Gemini** (ou Copilot, GPT-4, etc.). L'IA reprend directement à la prochaine action sans poser de questions sur ce qui est déjà décidé.
-
-Si tu as des fichiers clés à fournir, colle-les après le prompt :
+Si tu as des fichiers clés à fournir, ajoute-les à la suite :
 
 ```
 [le prompt d'amorce]
@@ -138,9 +101,6 @@ Si tu as des fichiers clés à fournir, colle-les après le prompt :
 Voici les fichiers pertinents :
 
 --- src/api.ts ---
-[contenu]
-
---- prisma/schema.prisma ---
 [contenu]
 ```
 
@@ -166,11 +126,9 @@ Généré automatiquement par `/handoff` :
 
 ## Conseils
 
-**`CONTEXT.md` est ignoré par git par défaut** — ajoute-le à ton `.gitignore` si ce n'est pas déjà le cas :
-```
+**Avant un `/handoff`** — dis à Claude ce qui reste flou ou non terminé. Plus il a d'infos dans la conversation, meilleur sera le `CONTEXT.md`.
+
+**`CONTEXT.md` dans `.gitignore`** — il contient du contexte local, pas du code. Ajoute-le si besoin :
+```bash
 echo "CONTEXT.md" >> .gitignore
 ```
-
-**Avant un `/handoff`**, dis à Claude ce qui reste flou ou non terminé. Plus il a d'infos dans le contexte conversationnel, meilleur sera le `CONTEXT.md` généré.
-
-**En début de nouvelle session**, `/init-context` fonctionne même si tu reviens plusieurs jours plus tard — tant que `CONTEXT.md` est à jour.

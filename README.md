@@ -106,6 +106,29 @@ Voici les fichiers pertinents :
 
 ---
 
+## Revenir sur Claude Code depuis Gemini
+
+Avant de quitter Gemini, demande-lui de mettre à jour `CONTEXT.md` :
+
+```
+Mets à jour le CONTEXT.md avec ce qu'on vient de faire. Garde la même structure, mets à jour :
+- Ce qui a été fait
+- Tâche en cours
+- Prochaine action immédiate
+- Décisions importantes prises
+- Pièges à éviter
+
+Affiche le contenu complet du fichier mis à jour.
+```
+
+Copie le résultat dans ton `CONTEXT.md`. Ensuite dans Claude Code :
+
+```
+/init-context
+```
+
+---
+
 ## Ce que contient CONTEXT.md
 
 Généré automatiquement par `/handoff` :

@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh repo *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(mkdir -p \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\.claude\\\\commands\")",
+      "Bash(mkdir -p \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\git-template\")",
+      "Bash(cp \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\.claude\\\\commands\\\\handoff.md\" \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\git-template\\\\.claude\\\\commands\\\\handoff.md\")",
+      "Bash(cp \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\.claude\\\\commands\\\\init-context.md\" \"c:\\\\_DOCUMENTS\\\\repositories\\\\_handoff-system\\\\git-template\\\\.claude\\\\commands\\\\init-context.md\")"
+    ]
+  }
+}

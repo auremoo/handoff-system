@@ -11,16 +11,19 @@ Deux commandes Claude Code pour ne jamais perdre le contexte quand tu switches v
 
 ## Installation
 
-Copier `.claude/` dans ton projet (une seule fois par projet) :
+Ajouter les deux commandes dans ton projet (une seule fois) :
 
 ```bash
-# Cloner et copier
 git clone https://github.com/auremoo/handoff-system tmp-handoff
-cp -r tmp-handoff/.claude .
+mkdir -p .claude/commands
+cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
+cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
 rm -rf tmp-handoff
 ```
 
-C'est tout. Les commandes sont disponibles dans Claude Code immédiatement.
+Ça n'écrase rien d'existant — seul le dossier `commands/` est ajouté. Ton `CLAUDE.md`, `.claude/settings.json`, etc. restent intacts.
+
+Les commandes sont disponibles dans Claude Code immédiatement.
 
 ---
 
@@ -30,7 +33,9 @@ C'est tout. Les commandes sont disponibles dans Claude Code immédiatement.
 mkdir mon-projet && cd mon-projet
 git init
 git clone https://github.com/auremoo/handoff-system tmp-handoff
-cp -r tmp-handoff/.claude .
+mkdir -p .claude/commands
+cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
+cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
 rm -rf tmp-handoff
 claude
 ```
@@ -61,23 +66,19 @@ Claude va :
 ```bash
 cd mon-projet-existant
 git clone https://github.com/auremoo/handoff-system tmp-handoff
-cp -r tmp-handoff/.claude .
+mkdir -p .claude/commands
+cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
+cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
 rm -rf tmp-handoff
 claude
 ```
 
-Dans Claude Code, donne le contexte une première fois :
+**Tu as déjà un `CLAUDE.md` ?** C'est parfait, garde-le tel quel. Il n'est pas touché. Claude s'en servira automatiquement pour mieux remplir `CONTEXT.md` lors du `/handoff`.
+
+**Pas encore de `CONTEXT.md` ?** `/init-context` n'aura rien à lire. Lance `/handoff` en fin de première session pour en créer un, ou crée-le manuellement :
 
 ```
-/init-context
-```
-
-S'il n'y a pas encore de `CONTEXT.md`, Claude n'aura rien à lire — dans ce cas, décris manuellement la situation :
-
-```
-Voici où on en est : [description].
-Fichiers clés : [liste].
-Prochaine action : [action].
+/handoff
 ```
 
 Ensuite le workflow est identique : code → `/handoff` en fin de session.

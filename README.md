@@ -11,8 +11,21 @@ Deux commandes Claude Code pour ne jamais perdre le contexte quand tu switches v
 
 ## Installation
 
-Ajouter les deux commandes dans ton projet (une seule fois) :
+Il s'agit juste de copier deux fichiers dans ton projet :
 
+```
+.claude/
+└── commands/
+    ├── handoff.md        ← à copier
+    └── init-context.md   ← à copier
+```
+
+**Option A — explorateur de fichiers**
+1. Télécharger ou cloner ce repo
+2. Dans ton projet, créer le dossier `.claude/commands/` s'il n'existe pas
+3. Copier `handoff.md` et `init-context.md` dedans
+
+**Option B — ligne de commande**
 ```bash
 git clone https://github.com/auremoo/handoff-system tmp-handoff
 mkdir -p .claude/commands

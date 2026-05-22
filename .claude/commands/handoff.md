@@ -26,6 +26,7 @@ Crée ou écrase le fichier `CONTEXT.md` à la racine du projet avec ce contenu 
 # CONTEXT HANDOFF — [DATE]
 
 > **Colle ce fichier en début de session Gemini ou autre LLM.**
+> **TL;DR** : [1 phrase — état actuel + prochaine action]
 
 ---
 
@@ -57,21 +58,6 @@ Crée ou écrase le fichier `CONTEXT.md` à la racine du projet avec ce contenu 
 
 ## Contraintes / pièges à éviter ⚠️
 [ce que l'autre LLM NE doit PAS faire]
-
-## Prompt d'amorce pour Gemini / autre LLM
-\`\`\`
-Tu reprends une session de développement. Voici le contexte exact :
-
-[COLLE LE CONTENU DE CE FICHIER ICI]
-
-Règles :
-- Ne me redemande pas ce qui est déjà décidé
-- Commence directement par la "Prochaine action immédiate"
-- Si tu as besoin d'un fichier, demande-le moi
-- Sois concis, on est en mid-session
-
-Go.
-\`\`\`
 ```
 
 **Étape 4** — Affiche le prompt d'amorce final prêt à copier-coller.

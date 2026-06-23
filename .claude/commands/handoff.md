@@ -1,6 +1,7 @@
 ---
 description: Génère un CONTEXT.md de handoff pour switcher vers Gemini ou un autre LLM sans perdre le contexte
 ---
+<!-- Handoff System — Auteur : Aurélien Moote - Moo - 2026 — Licence MIT -->
 
 Génère un fichier CONTEXT.md de handoff complet pour ce projet.
 

@@ -1,3 +1,6 @@
+> Créé par Aurélien Moote - Moo - 2026. Logiciel libre (licence MIT) :
+> réutilisable à condition de conserver la mention de l'auteur.
+
 # Handoff System
 
 Deux commandes Claude Code pour ne jamais perdre le contexte quand tu switches vers Gemini (ou n'importe quel autre LLM).
@@ -155,3 +158,11 @@ Généré automatiquement par `/handoff` :
 ```bash
 echo "CONTEXT.md" >> .gitignore
 ```
+
+
+---
+
+## Auteur & licence
+
+Créé par **Aurélien Moote - Moo - 2026**.
+Distribué sous licence [MIT](LICENSE) — réutilisable à condition de conserver la mention de l'auteur.

@@ -1,6 +1,7 @@
 ---
 description: Charge le CONTEXT.md du projet pour reprendre une session précédente
 ---
+<!-- Handoff System — Auteur : Aurélien Moote - Moo - 2026 — Licence MIT -->
 
 Lis le fichier `CONTEXT.md` à la racine du projet courant.
 

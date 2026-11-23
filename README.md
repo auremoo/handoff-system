@@ -6,7 +6,7 @@
 Deux commandes Claude Code pour ne jamais perdre le contexte quand tu switches vers Gemini (ou n'importe quel autre LLM).
 
 ```
-/handoff        ← en fin de session : Claude écrit CONTEXT.md + génère le prompt Gemini
+/handoff        ← en fin de session : Claude écrit CONTEXT.md, prêt à coller dans Gemini
 /init-context   ← en début de session : Claude relit CONTEXT.md et reprend exactement là où on était
 ```
 
@@ -14,30 +14,29 @@ Deux commandes Claude Code pour ne jamais perdre le contexte quand tu switches v
 
 ## Installation
 
-Il s'agit juste de copier deux fichiers dans ton projet :
+Il s'agit juste de copier deux fichiers, `handoff.md` et `init-context.md`.
 
-```
-.claude/
-└── commands/
-    ├── handoff.md        ← à copier
-    └── init-context.md   ← à copier
-```
+**Option A — une fois pour tous tes projets (recommandé)**
 
-**Option A — explorateur de fichiers**
+Copie les deux fichiers dans ton dossier personnel :
+
+- macOS / Linux : `~/.claude/commands/`
+- Windows : `%USERPROFILE%\.claude\commands\`
+
+**Option B — dans un seul projet, à la main**
 1. Télécharger ou cloner ce repo
 2. Dans ton projet, créer le dossier `.claude/commands/` s'il n'existe pas
 3. Copier `handoff.md` et `init-context.md` dedans
 
-**Option B — ligne de commande**
+**Option C — dans un seul projet, en ligne de commande** (bash / Git Bash)
 ```bash
-git clone https://github.com/auremoo/handoff-system tmp-handoff
+git clone --depth 1 https://github.com/auremoo/handoff-system tmp-handoff
 mkdir -p .claude/commands
-cp tmp-handoff/.claude/commands/handoff.md .claude/commands/
-cp tmp-handoff/.claude/commands/init-context.md .claude/commands/
+cp tmp-handoff/.claude/commands/*.md .claude/commands/
 rm -rf tmp-handoff
 ```
 
-Ça n'écrase rien d'existant — seul le dossier `commands/` est ajouté. Ton `CLAUDE.md`, `.claude/settings.json`, etc. restent intacts.
+Ça n'écrase rien d'existant — seuls deux fichiers sont ajoutés dans `commands/`. Ton `CLAUDE.md`, `.claude/settings.json`, etc. restent intacts.
 
 ---
 
@@ -60,7 +59,7 @@ Après l'installation, ouvre Claude Code directement.
 
 **Tu as déjà un `CLAUDE.md` ?** Garde-le tel quel — Claude s'en servira pour mieux remplir `CONTEXT.md`.
 
-**Pas encore de `CONTEXT.md` ?** `/init-context` n'aura rien à lire. Décris la situation manuellement en début de session, puis tape `/handoff` en fin de session pour en créer un.
+**Pas encore de `CONTEXT.md` ?** `/init-context` te le dira et te demandera de décrire la situation. Tape `/handoff` en fin de session pour en créer un.
 
 ---
 
@@ -73,33 +72,25 @@ claude
 
 # ... tu codes ...
 
-/handoff               ← génère CONTEXT.md + prompt prêt pour Gemini
+/handoff               ← écrit CONTEXT.md
 ```
 
 ---
 
 ## Reprendre sur Gemini / autre IA
 
-Après `/handoff`, Claude t'affiche un prompt d'amorce. Colle-le dans Gemini (ou Copilot, GPT-4, etc.) :
+`CONTEXT.md` est autonome : il contient déjà les règles de reprise (commencer par la prochaine action, ne rien redemander, rester concis). Colle son contenu, ou joins le fichier, comme premier message dans Gemini, Copilot, GPT, etc.
+
+Avec un outil qui a accès au repo (Gemini CLI, par exemple), une ligne suffit :
 
 ```
-Tu reprends une session de développement. Voici le contexte exact :
-
-[CONTENU DU CONTEXT.md]
-
-Règles :
-- Ne me redemande pas ce qui est déjà décidé
-- Commence directement par la "Prochaine action immédiate"
-- Si tu as besoin d'un fichier, demande-le moi
-- Sois concis, on est en mid-session
-
-Go.
+Lis CONTEXT.md et reprends.
 ```
 
-Si tu as des fichiers clés à fournir, ajoute-les à la suite :
+Si l'autre LLM n'a pas accès au repo, ajoute les fichiers clés à la suite :
 
 ```
-[le prompt d'amorce]
+[contenu de CONTEXT.md]
 
 Voici les fichiers pertinents :
 
@@ -115,6 +106,7 @@ Avant de quitter Gemini, demande-lui de mettre à jour `CONTEXT.md` :
 
 ```
 Mets à jour le CONTEXT.md avec ce qu'on vient de faire. Garde la même structure, mets à jour :
+- TL;DR
 - Ce qui a été fait
 - Tâche en cours
 - Prochaine action immédiate
@@ -124,11 +116,13 @@ Mets à jour le CONTEXT.md avec ce qu'on vient de faire. Garde la même structur
 Affiche le contenu complet du fichier mis à jour.
 ```
 
-Copie le résultat dans ton `CONTEXT.md`. Ensuite dans Claude Code :
+Copie le résultat dans ton `CONTEXT.md` (inutile si Gemini a écrit le fichier lui-même). Ensuite dans Claude Code :
 
 ```
 /init-context
 ```
+
+Si la branche a changé ou si des commits ont eu lieu depuis le handoff, `/init-context` le signale : c'est le signe que `CONTEXT.md` n'a peut-être pas été mis à jour.
 
 ---
 
@@ -138,27 +132,30 @@ Généré automatiquement par `/handoff` :
 
 | Section | Contenu |
 |---|---|
-| Stack / branche | Détectés automatiquement |
+| TL;DR + règles de reprise | État actuel en 1 phrase, consignes pour le LLM qui reprend |
+| Stack / branche | Tirés de la session et de git |
 | Objectif de la session | Résumé par Claude en 1-2 phrases |
 | Ce qui a été fait | Liste des tâches terminées |
 | Tâche en cours | Fichier exact + étape précise où on s'est arrêté |
 | Prochaine action | Une seule action concrète |
 | Décisions prises | Choix d'archi, libs, patterns retenus |
-| Fichiers modifiés | `git diff --name-only` |
+| Fichiers modifiés non commités | `git status` — modifiés, indexés et nouveaux fichiers |
 | Derniers commits | `git log --oneline -5` |
 | Pièges à éviter | Ce que l'autre LLM ne doit PAS faire |
+
+Une section sans contenu est omise. D'un handoff au suivant, les décisions et pièges encore valides sont conservés.
 
 ---
 
 ## Conseils
 
-**Avant un `/handoff`** — dis à Claude ce qui reste flou ou non terminé. Plus il a d'infos dans la conversation, meilleur sera le `CONTEXT.md`.
+**Précise ce qui reste flou** — directement dans la commande :
 
-**`CONTEXT.md` dans `.gitignore`** — il contient du contexte local, pas du code. Ajoute-le si besoin :
-```bash
-echo "CONTEXT.md" >> .gitignore
+```
+/handoff le bug de cache n'est pas résolu, la piste Redis est à abandonner
 ```
 
+**`CONTEXT.md` dans `.gitignore`** — il contient du contexte local, pas du code. Ajoute la ligne `CONTEXT.md` à ton `.gitignore` si tu ne veux pas le versionner.
 
 ---
 

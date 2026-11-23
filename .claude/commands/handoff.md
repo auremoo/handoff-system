@@ -1,45 +1,42 @@
 ---
 description: Génère un CONTEXT.md de handoff pour switcher vers Gemini ou un autre LLM sans perdre le contexte
+argument-hint: [précisions optionnelles]
 ---
 <!-- Handoff System — Auteur : Aurélien Moote - Moo - 2026 — Licence MIT -->
 
-Génère un fichier CONTEXT.md de handoff complet pour ce projet.
+Écris `CONTEXT.md` à la racine du projet : un handoff autonome pour un LLM qui n'aura pas notre historique.
 
-**Étape 1 — Collecte le contexte git**
+Précisions de l'utilisateur (prioritaires ; peut être vide) : $ARGUMENTS
 
-Exécute ces commandes :
-```bash
-git rev-parse --abbrev-ref HEAD
-git log --oneline -5
-git diff --name-only
-git diff --cached --name-only
-```
+**Règles**
 
-**Étape 2 — Détecte la stack**
+- Ta source est cette conversation. N'explore pas le code et ne relis aucun fichier : `/handoff` est souvent lancé en limite de contexte.
+- Une seule commande à lancer (saute-la si le projet n'est pas un dépôt git) :
+  ```
+  git status -sb; git log --oneline -5
+  ```
+- Stack : celle connue par la session ou `CLAUDE.md`. Ne regarde les fichiers racine (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`…) que si elle est inconnue.
+- Si `CONTEXT.md` existe déjà : garde ses décisions et pièges encore valides, remplace tout le reste.
+- Dense et précis : chemins exacts, noms de fonctions, messages d'erreur tels quels. N'invente rien ; une section sans contenu réel est omise (sauf TL;DR et Prochaine action).
 
-Vérifie les fichiers à la racine : `package.json` → Node.js, `tsconfig.json` → TypeScript, `requirements.txt` / `pyproject.toml` → Python, `Cargo.toml` → Rust, `go.mod` → Go, `pom.xml` → Java.
-
-**Étape 3 — Écris CONTEXT.md**
-
-Crée ou écrase le fichier `CONTEXT.md` à la racine du projet avec ce contenu (complété avec les vraies informations) :
+**Contenu de CONTEXT.md**
 
 ```
-# CONTEXT HANDOFF — [DATE]
+# CONTEXT HANDOFF — [date et heure]
 
-> **Colle ce fichier en début de session Gemini ou autre LLM.**
 > **TL;DR** : [1 phrase — état actuel + prochaine action]
-
----
+>
+> **Pour le LLM qui reprend** : commence directement par la « Prochaine action immédiate ». Ne redemande pas ce qui est déjà décidé ici. Si tu n'as pas accès à un fichier dont tu as besoin, demande-le. Sois concis.
 
 ## Projet
-- **Stack** : [stack détectée]
+- **Stack** : [stack]
 - **Branche git** : [branche]
 
 ## Objectif de la session
-[résume en 1-2 phrases ce qu'on essayait d'accomplir]
+[1-2 phrases]
 
 ## Ce qui a été fait ✅
-[liste des tâches terminées dans cette session]
+[tâches terminées dans cette session]
 
 ## Tâche en cours ⚙️
 **Fichier(s) concerné(s)** : [fichiers]
@@ -49,10 +46,10 @@ Crée ou écrase le fichier `CONTEXT.md` à la racine du projet avec ce contenu 
 [UNE seule action concrète, la plus précise possible]
 
 ## Décisions importantes prises
-[choix d'architecture, libs, patterns retenus]
+[choix d'architecture, libs, patterns retenus — et pourquoi]
 
-## Fichiers clés modifiés
-[git diff --name-only]
+## Fichiers modifiés non commités
+[sortie de git status : modifiés, indexés et nouveaux fichiers]
 
 ## Derniers commits
 [git log --oneline -5]
@@ -61,6 +58,4 @@ Crée ou écrase le fichier `CONTEXT.md` à la racine du projet avec ce contenu 
 [ce que l'autre LLM NE doit PAS faire]
 ```
 
-**Étape 4** — Affiche le prompt d'amorce final prêt à copier-coller.
-
-Sois dense et précis — chaque mot compte, l'autre LLM n'aura pas notre historique.
+**Pour finir** — ne réaffiche pas le contenu du fichier. Réponds en deux lignes maximum : le fichier est écrit, il suffit de le coller ou de le joindre tel quel dans l'autre LLM.

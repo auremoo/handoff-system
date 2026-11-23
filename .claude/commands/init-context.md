@@ -3,13 +3,11 @@ description: Charge le CONTEXT.md du projet pour reprendre une session précéde
 ---
 <!-- Handoff System — Auteur : Aurélien Moote - Moo - 2026 — Licence MIT -->
 
-Lis le fichier `CONTEXT.md` à la racine du projet courant.
+Lis `CONTEXT.md` à la racine du projet. Ne lis rien d'autre et n'explore pas le code.
 
-```bash
-cat CONTEXT.md
-```
+**S'il n'existe pas** : dis-le en une phrase, demande-moi de décrire la situation, et arrête-toi là.
 
-Après lecture :
-1. Confirme en une phrase ce que tu as compris de la situation
-2. Identifie la "Prochaine action immédiate" et propose de la commencer
-3. Ne redemande pas ce qui est déjà décidé dans le fichier
+**S'il existe** :
+1. Confirme en une phrase ce que tu as compris de la situation.
+2. Si la branche git a changé ou si des commits ont eu lieu depuis le handoff, signale-le en une ligne : le fichier est peut-être en retard sur le code.
+3. Propose de commencer la « Prochaine action immédiate ». Ne redemande pas ce qui est déjà décidé dans le fichier.
